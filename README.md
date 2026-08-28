@@ -4,6 +4,8 @@ A sports analytics portfolio project that turns historical NFL player data into 
 
 The project is designed to demonstrate the kinds of skills used in sports business intelligence and game operations: Python, SQL, predictive modeling, feature engineering, backtesting, dashboarding, data quality thinking, and concise decision support.
 
+### [View the interactive dashboard](https://scyoung2004-design.github.io/nfl-prematch-projection-engine/)
+
 > **Independent project:** This project is not affiliated with PrizePicks and does not use or attempt to reproduce any proprietary PrizePicks data, models, trading rules, pricing logic, or internal processes.
 
 ## Why this project
@@ -83,6 +85,8 @@ nfl-prematch-projection-engine/
 ├── dashboard/
 │   ├── index.html
 │   └── tableau_build_guide.md
+├── docs/
+│   └── index.html
 └── assets/
     ├── holdout_mae_comparison.png
     ├── weekly_mae_passing_yards.png
@@ -96,12 +100,12 @@ From the project folder:
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\\Scripts\\activate
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 python src/build_project.py
 ```
 
-The script downloads the 2023 and 2024 weekly files, rebuilds all features, trains the three models, runs the holdout test, writes CSV outputs, creates a SQLite database, generates charts, and rebuilds the HTML dashboard.
+The script downloads the 2023 and 2024 weekly files, rebuilds all features, trains the three models, runs the holdout test, writes CSV outputs, generates a local SQLite database, creates charts, and rebuilds the HTML dashboard. The generated database is not tracked in this repository.
 
 Open `dashboard/index.html` in a browser to explore the local dashboard.
 
