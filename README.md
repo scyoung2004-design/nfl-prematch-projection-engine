@@ -1,16 +1,16 @@
-# NFL Pre-Match Player Projection & Game Operations Dashboard
+# NFL 2026 Pre-Match Player Projection & Game Operations Dashboard
 
-A sports analytics portfolio project that turns historical NFL player data into **pre-match player-stat projections, model-monitoring metrics, and an operational review queue**.
+A sports analytics portfolio project that turns historical NFL player data into **forward-looking player-stat projections, model-validation metrics, and an operational review queue**.
 
-The project is designed to demonstrate the kinds of skills used in sports business intelligence and game operations: Python, SQL, predictive modeling, feature engineering, backtesting, dashboarding, data quality thinking, and concise decision support.
+The project is designed to demonstrate skills used in sports business intelligence and game operations: Python, SQL, predictive modeling, feature engineering, backtesting, dashboarding, data quality thinking, and concise decision support.
 
-### [View the interactive dashboard](https://scyoung2004-design.github.io/nfl-prematch-projection-engine/)
+### [View the 2026 Week 1 interactive dashboard](https://scyoung2004-design.github.io/nfl-prematch-projection-engine/)
 
 > **Independent project:** This project is not affiliated with PrizePicks and does not use or attempt to reproduce any proprietary PrizePicks data, models, trading rules, pricing logic, or internal processes.
 
 ## Why this project
 
-PrizePicks describes Player Picks as player-stat projections where the platform sets a projection and users choose whether a player will finish above or below it. That creates a useful public portfolio problem: **how can historical performance, usage, and opponent context be transformed into disciplined pre-game projections and a review workflow?**
+Player-projection products create a useful public analytics problem: **how can historical performance, recent workload, and opponent context be transformed into disciplined pre-game projections and a review workflow?**
 
 This project models three NFL markets:
 
@@ -18,51 +18,81 @@ This project models three NFL markets:
 - RB rushing yards
 - WR/TE receiving yards
 
-## Holdout results
+The project began as a historical backtest and was then extended into a **2026 forward-looking Week 1 projection board**.
 
-The model is fitted on **2023 regular-season data** and tested on **2024 regular-season data it did not train on**. Each test-season feature is built using only prior games from that same season, so the backtest avoids using future-game information.
+## Modeling and validation workflow
 
-| Market | 2024 test projections | Ridge MAE | Trailing-3 MAE | Improvement |
+The current version follows a time-aware modeling process:
+
+1. Use **2023-2024 historical NFL data** to develop and fit the validation models.
+2. Test those models on **unseen 2025 player-games**.
+3. Compare model MAE against a trailing-3-game recent-form baseline.
+4. Refit the final projection framework using **2023-2025 history**.
+5. Generate **2026 Week 1 pre-match projections** for eligible returning players.
+
+Features are calculated from information available before the projected game rather than from future outcomes.
+
+## 2025 holdout results
+
+The 2025 season serves as an out-of-sample validation set before generating the 2026 board.
+
+| Market | 2025 test projections | Model MAE | Trailing-3 MAE | Improvement |
 |---|---:|---:|---:|---:|
-| Passing yards | 406 | 64.08 | 68.43 | **6.4%** |
-| Rushing yards | 537 | 27.48 | 28.98 | **5.2%** |
-| Receiving yards | 1,231 | 26.65 | 29.23 | **8.8%** |
+| Passing yards | 402 | 62.11 | 69.79 | **11.0%** |
+| Rushing yards | 577 | 27.08 | 29.66 | **8.7%** |
+| Receiving yards | 1,210 | 26.08 | 28.18 | **7.4%** |
 
-The model beat the recent-form baseline across all three markets on the full 2024 holdout sample. Receiving yards produced the largest relative improvement.
+Across all three markets, the validation sample contains **2,189 player-game projections**. The model improved on the trailing-3 baseline in every market.
 
-## Modeling approach
+> MAE is measured in yards, so MAE values should be interpreted within each market rather than compared directly across passing, rushing, and receiving.
 
-The model uses ridge regression because the goal is not just prediction quality; it is also a model that is stable, explainable, and easy to discuss with a business or game-operations partner.
+## 2026 Week 1 projection board
 
-For every eligible player-week, the feature pipeline creates:
+The published dashboard contains a featured set of 2026 Week 1 projections and allows filtering by:
 
-- previous-game result (`lag1`)
-- trailing 3-game average
-- trailing 5-game average
-- trailing 8-game average
-- trailing 3-game usage average
-- trailing 5-game usage average
-- opponent's trailing 5-game yards allowed to the relevant position group
-- normalized week index
+- market
+- risk level
+- player or team search
 
-Eligibility thresholds are based only on **prior usage**:
+Each row includes:
 
-- QB: trailing-3 attempts >= 20
-- RB: trailing-3 carries >= 7
-- WR/TE: trailing-3 targets >= 4
+- model projection
+- trailing-3 average
+- trailing-5 average
+- recent workload
+- opponent trailing-5 yards allowed
+- historical games available
+- manual-review risk level
 
-These filters are a simple approximation of the kinds of players likely to have meaningful pre-match stat markets; they are not intended to replicate any sportsbook or DFS board-selection rules.
+The dashboard is a **forward-looking portfolio demonstration**, not a wagering recommendation.
 
 ## Game-operations risk layer
 
-A projection is not automatically an operationally safe number. The project therefore adds a review score based on:
+A projection is not automatically operationally safe. The project adds a review layer intended to identify cases that deserve additional analyst attention.
 
-1. **Model vs. recent-form disagreement** — a large gap between the model projection and trailing-3 average.
-2. **Recent volatility** — players whose recent outcomes vary substantially.
+Risk is driven by factors such as:
 
-Rows are labeled LOW, MEDIUM, or HIGH risk and can be routed to a review queue in SQL or the dashboard.
+1. **Model vs. recent-form disagreement**
+2. **Recent player volatility**
 
-This is intentionally a **review flag**, not a betting signal. A production system should combine it with information unavailable in this first version, including injuries, depth charts, expected playing time, weather, news, line movement, and manual sport-owner judgment.
+Rows are labeled **LOW, MEDIUM, or HIGH** risk.
+
+A HIGH-risk row does **not** mean a player is expected to go over or under the projection. It means a Game Operations analyst should investigate additional context such as injuries, role changes, depth chart, expected snaps, weather, and late news before relying on the estimate.
+
+## Modeling approach
+
+Ridge regression was selected as the first modeling framework because rolling-performance and workload features are naturally correlated. Regularization helps stabilize the coefficients while keeping the model interpretable.
+
+The feature set centers on prior-game information such as:
+
+- previous-game production
+- trailing 3-game performance
+- trailing 5-game performance
+- longer recent-history averages where available
+- recent attempts, carries, or targets
+- opponent recent yards allowed to the relevant position group
+
+Eligibility is based on prior workload so that the board focuses on players with enough recent usage and historical information to support a meaningful estimate.
 
 ## Project structure
 
@@ -94,7 +124,9 @@ nfl-prematch-projection-engine/
     └── weekly_mae_receiving_yards.png
 ```
 
-## Run the full pipeline
+The files in `outputs/` and `assets/` preserve the original historical backtest artifacts. The GitHub Pages site in `docs/index.html` is the forward-looking 2026 Week 1 portfolio dashboard.
+
+## Run the historical pipeline
 
 From the project folder:
 
@@ -105,17 +137,17 @@ pip install -r requirements.txt
 python src/build_project.py
 ```
 
-The script downloads the 2023 and 2024 weekly files, rebuilds all features, trains the three models, runs the holdout test, writes CSV outputs, generates a local SQLite database, creates charts, and rebuilds the HTML dashboard. The generated database is not tracked in this repository.
+The historical pipeline downloads weekly NFL files, rebuilds features, trains the models, runs the holdout test, writes CSV outputs, generates a local SQLite database, creates charts, and rebuilds the historical HTML dashboard.
 
-Open `dashboard/index.html` in a browser to explore the local dashboard.
+The generated SQLite database is not tracked in this repository.
 
 ## SQL examples
 
-The SQLite output allows questions such as:
+The SQL layer supports analyst-style questions such as:
 
-- Which market improved most over the trailing-3 baseline?
-- Which weeks did the model underperform the heuristic?
-- Which player projections should enter a manual review queue?
+- Which market improved most over the recent-form baseline?
+- Which weeks did the model underperform?
+- Which projections should enter a manual review queue?
 - Which positions or markets have the highest error?
 - Where does the model disagree most with recent form?
 
@@ -123,7 +155,7 @@ See `sql/analysis_queries.sql`.
 
 ## Data source
 
-The historical weekly JSON files are hosted in the public `NityaGehlot/nfl-data` repository. Its documented pipeline derives player statistics from `nflreadr` / nflverse and exposes weekly player JSON files with fields including player, position, team, opponent, attempts, carries, targets, passing yards, rushing yards, and receiving yards.
+Historical weekly NFL files come from the public `NityaGehlot/nfl-data` repository, whose documented pipeline derives player statistics from `nflreadr` / nflverse.
 
 Primary references:
 
@@ -131,17 +163,37 @@ Primary references:
 - https://github.com/nflverse/nflverse-data
 - https://www.prizepicks.com/help-center/player-picks
 
+See `ATTRIBUTION.md` for additional project attribution.
+
+## Current limitations
+
+The 2026 board is a portfolio model built from historical football data. It does not currently incorporate every piece of information a production Game Operations team would use.
+
+Important missing or simplified inputs include:
+
+- real-time injuries and practice status
+- confirmed depth charts and starting roles
+- expected snap counts
+- weather
+- late-breaking news
+- market movement
+- manual sport-owner adjustments
+
+The risk layer is designed partly to surface cases where those missing inputs matter most.
+
 ## What I would add next
 
 1. Injury and practice-status features.
-2. Depth-chart / expected-snap features.
+2. Depth-chart and expected-snap features.
 3. Weather and game-environment inputs.
-4. Team implied scoring / market context where permitted.
-5. Quantile regression to estimate a conditional median rather than only a conditional mean.
-6. Walk-forward model refitting instead of a fixed prior-season model.
+4. Automated weekly 2026 refreshes.
+5. Quantile regression for conditional-median projections.
+6. Walk-forward model refitting.
 7. Calibration monitoring by player archetype and projection range.
-8. Live ingestion and alerting for late-breaking changes.
+8. Alerts for major late-breaking projection changes.
 
 ## Key takeaway
 
-The most useful result is not that the model predicts every player perfectly—it does not. The useful result is that a transparent, reusable pipeline **improved on a simple recent-form heuristic across all three holdout markets**, while also exposing the cases where a human analyst should investigate further.
+The project demonstrates a complete analytics workflow: **develop a model, validate it on unseen data, compare it against a simple benchmark, identify operational risk, and then use the validated framework to create forward-looking projections.**
+
+The objective is not to claim perfect player forecasting. It is to build a transparent, reusable decision-support process that improves on a simple recent-form heuristic while clearly identifying cases that deserve human review.
