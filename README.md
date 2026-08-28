@@ -20,6 +20,14 @@ This project models three NFL markets:
 
 The project began as a historical backtest and was then extended into a **2026 forward-looking Week 1 projection board**.
 
+### Historical backtest
+
+The first version of the project focused on proving the modeling approach before generating forward-looking projections. It trained on **2023 regular-season data** and evaluated on **unseen 2024 player-games**, comparing ridge-regression projections against a trailing-3-game baseline across passing, rushing, and receiving yards.
+
+### [View the original historical backtest dashboard](https://scyoung2004-design.github.io/nfl-prematch-projection-engine/backtesting.html)
+
+That historical stage established the project’s core workflow: build time-aware features, prevent data leakage, benchmark against a simple heuristic, measure out-of-sample error, and flag projections that deserve manual review. The later 2025 validation and 2026 Week 1 board extend that same framework rather than replacing it.
+
 ## Modeling and validation workflow
 
 The current version follows a time-aware modeling process:
@@ -116,7 +124,8 @@ nfl-prematch-projection-engine/
 │   ├── index.html
 │   └── tableau_build_guide.md
 ├── docs/
-│   └── index.html
+│   ├── index.html
+│   └── backtesting.html
 └── assets/
     ├── holdout_mae_comparison.png
     ├── weekly_mae_passing_yards.png
