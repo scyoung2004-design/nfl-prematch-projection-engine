@@ -1,48 +1,30 @@
-# NFL 2026 Pre-Match Player Projection & Game Operations Dashboard
+# NFL 2026 Pre-Match Player Projection Engine
 
-A sports analytics portfolio project that turns historical NFL player data into **forward-looking player-stat projections, model-validation metrics, and an operational review queue**.
+A sports analytics portfolio project that uses historical NFL data to **validate predictive models, generate forward-looking player-stat projections, and flag high-uncertainty cases for manual review**.
 
-The project is designed to demonstrate skills used in sports business intelligence and game operations: Python, SQL, predictive modeling, feature engineering, backtesting, dashboarding, data quality thinking, and concise decision support.
+**Tech:** Python · SQL · Ridge Regression · Feature Engineering · Backtesting · Dashboarding
 
 ### [View the 2026 Week 1 interactive dashboard](https://scyoung2004-design.github.io/nfl-prematch-projection-engine/)
 
-> **Independent project:** This project is not affiliated with PrizePicks and does not use or attempt to reproduce any proprietary PrizePicks data, models, trading rules, pricing logic, or internal processes.
+> **Independent project:** This project is not affiliated with PrizePicks and does not use or attempt to reproduce proprietary PrizePicks data, pricing logic, trading rules, or internal models.
 
-## Why this project
+## Project overview
 
-Player-projection products create a useful public analytics problem: **how can historical performance, recent workload, and opponent context be transformed into disciplined pre-game projections and a review workflow?**
+The project asks a practical Game Operations question:
 
-This project models three NFL markets:
+> **How can recent player performance, workload, and opponent context be turned into disciplined pre-match projections and a repeatable review workflow?**
+
+It models three NFL player-stat markets:
 
 - QB passing yards
 - RB rushing yards
 - WR/TE receiving yards
 
-The project began as a historical backtest and was then extended into a **2026 forward-looking Week 1 projection board**.
+The project began as a historical backtest, then progressed to an unseen-season validation and a forward-looking **2026 Week 1 projection board**.
 
-### Historical backtest
+## Validation results
 
-The first version of the project focused on proving the modeling approach before generating forward-looking projections. It trained on **2023 regular-season data** and evaluated on **unseen 2024 player-games**, comparing ridge-regression projections against a trailing-3-game baseline across passing, rushing, and receiving yards.
-
-### [View the original historical backtest dashboard](https://scyoung2004-design.github.io/nfl-prematch-projection-engine/backtesting.html)
-
-That historical stage established the project’s core workflow: build time-aware features, prevent data leakage, benchmark against a simple heuristic, measure out-of-sample error, and flag projections that deserve manual review. The later 2025 validation and 2026 Week 1 board extend that same framework rather than replacing it.
-
-## Modeling and validation workflow
-
-The current version follows a time-aware modeling process:
-
-1. Use **2023-2024 historical NFL data** to develop and fit the validation models.
-2. Test those models on **unseen 2025 player-games**.
-3. Compare model MAE against a trailing-3-game recent-form baseline.
-4. Refit the final projection framework using **2023-2025 history**.
-5. Generate **2026 Week 1 pre-match projections** for eligible returning players.
-
-Features are calculated from information available before the projected game rather than from future outcomes.
-
-## 2025 holdout results
-
-The 2025 season serves as an out-of-sample validation set before generating the 2026 board.
+Models were developed on **2023–2024 history** and tested on **unseen 2025 player-games** before the final framework was refit using 2023–2025 data.
 
 | Market | 2025 test projections | Model MAE | Trailing-3 MAE | Improvement |
 |---|---:|---:|---:|---:|
@@ -50,59 +32,62 @@ The 2025 season serves as an out-of-sample validation set before generating the 
 | Rushing yards | 577 | 27.08 | 29.66 | **8.7%** |
 | Receiving yards | 1,210 | 26.08 | 28.18 | **7.4%** |
 
-Across all three markets, the validation sample contains **2,189 player-game projections**. The model improved on the trailing-3 baseline in every market.
+Across **2,189 holdout projections**, the model improved on the trailing-3 baseline in all three markets.
 
-> MAE is measured in yards, so MAE values should be interpreted within each market rather than compared directly across passing, rushing, and receiving.
+> MAE is measured in yards, so results should be interpreted within each market rather than compared directly across passing, rushing, and receiving.
 
-## 2026 Week 1 projection board
+## From backtest to forward projections
 
-The published dashboard contains a featured set of 2026 Week 1 projections and allows filtering by:
+The first version trained on **2023 regular-season data** and evaluated on **unseen 2024 player-games**. That stage established the core workflow: time-aware feature creation, leakage prevention, benchmark comparison, out-of-sample evaluation, and manual-review flags.
 
-- market
-- risk level
-- player or team search
+### [View the original historical backtest dashboard](https://scyoung2004-design.github.io/nfl-prematch-projection-engine/backtesting.html)
 
-Each row includes:
+The current version extends that framework:
+
+1. Develop models using 2023–2024 history.
+2. Validate on unseen 2025 player-games.
+3. Compare against a trailing-3 recent-form baseline.
+4. Refit using 2023–2025 history.
+5. Generate 2026 Week 1 projections for eligible returning players.
+
+## 2026 Week 1 dashboard
+
+The live portfolio dashboard includes featured Week 1 projections with filters for market, risk level, player, and team.
+
+Each row shows:
 
 - model projection
-- trailing-3 average
-- trailing-5 average
+- trailing-3 and trailing-5 averages
 - recent workload
 - opponent trailing-5 yards allowed
-- historical games available
+- available historical games
 - manual-review risk level
 
-The dashboard is a **forward-looking portfolio demonstration**, not a wagering recommendation.
+The dashboard is a **decision-support demonstration, not a wagering recommendation**.
 
-The published featured board is also preserved in `outputs/2026_week1_featured_board.csv`, and the validation metrics shown on the dashboard are preserved in `outputs/2025_validation_metrics.csv`.
+## Game Operations risk layer
 
-## Game-operations risk layer
+Model output is not treated as automatically safe. Each projection receives a review flag based primarily on:
 
-A projection is not automatically operationally safe. The project adds a review layer intended to identify cases that deserve additional analyst attention.
-
-Risk is driven by factors such as:
-
-1. **Model vs. recent-form disagreement**
-2. **Recent player volatility**
+- **model vs. recent-form disagreement**
+- **recent player volatility**
 
 Rows are labeled **LOW, MEDIUM, or HIGH** risk.
 
-A HIGH-risk row does **not** mean a player is expected to go over or under the projection. It means a Game Operations analyst should investigate additional context such as injuries, role changes, depth chart, expected snaps, weather, and late news before relying on the estimate.
+A HIGH-risk label does not imply a player should go over or under. It means the estimate deserves additional analyst review for factors such as injuries, depth-chart changes, expected snaps, weather, and late-breaking news.
 
 ## Modeling approach
 
-Ridge regression was selected as the first modeling framework because rolling-performance and workload features are naturally correlated. Regularization helps stabilize the coefficients while keeping the model interpretable.
+Ridge regression was selected because recent-performance and workload features are naturally correlated. Regularization helps stabilize the model while keeping it interpretable.
 
-The feature set centers on prior-game information such as:
+Core features include:
 
 - previous-game production
-- trailing 3-game performance
-- trailing 5-game performance
-- longer recent-history averages where available
+- trailing 3-, 5-, and longer-history averages
 - recent attempts, carries, or targets
 - opponent recent yards allowed to the relevant position group
 
-Eligibility is based on prior workload so that the board focuses on players with enough recent usage and historical information to support a meaningful estimate.
+Eligibility is based on prior workload so projections focus on players with enough recent usage and history to support a meaningful estimate.
 
 ## Project structure
 
@@ -111,12 +96,9 @@ nfl-prematch-projection-engine/
 ├── README.md
 ├── ATTRIBUTION.md
 ├── PROJECT_NOTES.md
-├── REPRODUCIBILITY.md
-├── .gitignore
 ├── requirements.txt
 ├── src/
-│   ├── build_project.py
-│   └── build_live_2026.py
+│   └── build_project.py
 ├── sql/
 │   ├── schema.sql
 │   └── analysis_queries.sql
@@ -124,9 +106,7 @@ nfl-prematch-projection-engine/
 │   ├── model_metrics.csv
 │   ├── weekly_metrics.csv
 │   ├── model_coefficients.csv
-│   ├── week18_projection_board.csv
-│   ├── 2025_validation_metrics.csv
-│   └── 2026_week1_featured_board.csv
+│   └── week18_projection_board.csv
 ├── dashboard/
 │   ├── index.html
 │   └── tableau_build_guide.md
@@ -140,28 +120,9 @@ nfl-prematch-projection-engine/
     └── weekly_mae_receiving_yards.png
 ```
 
-The files in `outputs/` and `assets/` preserve the original historical backtest artifacts as well as fixed snapshots of the published 2025 validation and 2026 featured board. The GitHub Pages site in `docs/index.html` is the forward-looking 2026 Week 1 portfolio dashboard.
-
-## Reproduce the 2026 board
-
-The repository now includes a reproducible forward-looking pipeline rather than only the published HTML dashboard.
-
-```bash
-python -m venv .venv
-source .venv/bin/activate   # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python src/build_live_2026.py
-```
-
-The live script rebuilds the 2025 validation, refits the model on 2023-2025 history, downloads the 2026 nflverse roster and schedule, generates the Week 1 board, writes review/omission outputs, and rebuilds both the local and GitHub Pages dashboards.
-
-The exact values currently published on the portfolio dashboard are also preserved as fixed CSV snapshots in `outputs/2025_validation_metrics.csv` and `outputs/2026_week1_featured_board.csv`. Because the 2026 roster is a live upstream source, a later rerun can change as roster information changes.
-
-See [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) for the full rebuild notes.
+The files in `outputs/` and `assets/` preserve the historical backtest artifacts. `docs/index.html` powers the forward-looking 2026 dashboard, while `docs/backtesting.html` preserves the original backtest dashboard.
 
 ## Run the historical pipeline
-
-From the project folder:
 
 ```bash
 python -m venv .venv
@@ -170,63 +131,42 @@ pip install -r requirements.txt
 python src/build_project.py
 ```
 
-The historical pipeline downloads weekly NFL files, rebuilds features, trains the models, runs the holdout test, writes CSV outputs, generates a local SQLite database, creates charts, and rebuilds the historical HTML dashboard.
+The pipeline rebuilds historical features, trains the models, evaluates holdout performance, writes CSV outputs, generates a local SQLite database, creates charts, and rebuilds the historical dashboard. The generated database is not tracked in the repository.
 
-The generated SQLite database is not tracked in this repository.
+## SQL layer
 
-## SQL examples
+`sql/analysis_queries.sql` supports questions such as:
 
-The SQL layer supports analyst-style questions such as:
-
-- Which market improved most over the recent-form baseline?
-- Which weeks did the model underperform?
+- Which market improved most over the baseline?
+- Which weeks had the highest model error?
 - Which projections should enter a manual review queue?
-- Which positions or markets have the highest error?
 - Where does the model disagree most with recent form?
-
-See `sql/analysis_queries.sql`.
-
-## Data source
-
-Historical weekly NFL files come from the public `NityaGehlot/nfl-data` repository, whose documented pipeline derives player statistics from `nflreadr` / nflverse.
-
-Primary references:
-
-- https://github.com/NityaGehlot/nfl-data
-- https://github.com/nflverse/nflverse-data
-- https://www.prizepicks.com/help-center/player-picks
-
-See `ATTRIBUTION.md` for additional project attribution.
 
 ## Current limitations
 
-The 2026 board is a portfolio model built from historical football data. It does not currently incorporate every piece of information a production Game Operations team would use.
-
-Important missing or simplified inputs include:
+The 2026 board does not yet incorporate every input a production Game Operations team would use, including:
 
 - real-time injuries and practice status
-- confirmed depth charts and starting roles
-- expected snap counts
+- confirmed depth charts and expected snaps
 - weather
 - late-breaking news
 - market movement
 - manual sport-owner adjustments
 
-The risk layer is designed partly to surface cases where those missing inputs matter most.
+These are natural next steps for improving both projection accuracy and the risk-review process.
 
-## What I would add next
+## Data and attribution
 
-1. Injury and practice-status features.
-2. Depth-chart and expected-snap features.
-3. Weather and game-environment inputs.
-4. Automated weekly 2026 refreshes.
-5. Quantile regression for conditional-median projections.
-6. Walk-forward model refitting.
-7. Calibration monitoring by player archetype and projection range.
-8. Alerts for major late-breaking projection changes.
+Historical NFL data comes from the public `NityaGehlot/nfl-data` repository, whose documented pipeline derives player statistics from `nflreadr` / nflverse.
+
+- https://github.com/NityaGehlot/nfl-data
+- https://github.com/nflverse/nflverse-data
+- https://www.prizepicks.com/help-center/player-picks
+
+See `ATTRIBUTION.md` for additional details.
 
 ## Key takeaway
 
-The project demonstrates a complete analytics workflow: **develop a model, validate it on unseen data, compare it against a simple benchmark, identify operational risk, and then use the validated framework to create forward-looking projections.**
+This project demonstrates a complete analytics workflow: **build a model, validate it on unseen data, benchmark it against a simple heuristic, identify operational risk, and use the validated framework to produce forward-looking projections.**
 
-The objective is not to claim perfect player forecasting. It is to build a transparent, reusable decision-support process that improves on a simple recent-form heuristic while clearly identifying cases that deserve human review.
+The goal is not perfect forecasting. It is a transparent, reusable decision-support process that improves on recent-form heuristics while clearly identifying cases that deserve human review.
