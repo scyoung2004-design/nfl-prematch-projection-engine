@@ -1,0 +1,4 @@
+market,test_n,mae,rmse,bias,baseline_mae,mae_improvement_pct
+passing_yards,402,62.11,79.5,2.7,69.79,11.0
+rushing_yards,577,27.08,36.56,-1.24,29.66,8.7
+receiving_yards,1210,26.08,33.39,1.87,28.18,7.4
