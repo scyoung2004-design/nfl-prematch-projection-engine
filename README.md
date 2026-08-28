@@ -74,6 +74,8 @@ Each row includes:
 
 The dashboard is a **forward-looking portfolio demonstration**, not a wagering recommendation.
 
+The published featured board is also preserved in `outputs/2026_week1_featured_board.csv`, and the validation metrics shown on the dashboard are preserved in `outputs/2025_validation_metrics.csv`.
+
 ## Game-operations risk layer
 
 A projection is not automatically operationally safe. The project adds a review layer intended to identify cases that deserve additional analyst attention.
@@ -109,9 +111,12 @@ nfl-prematch-projection-engine/
 ├── README.md
 ├── ATTRIBUTION.md
 ├── PROJECT_NOTES.md
+├── REPRODUCIBILITY.md
+├── .gitignore
 ├── requirements.txt
 ├── src/
-│   └── build_project.py
+│   ├── build_project.py
+│   └── build_live_2026.py
 ├── sql/
 │   ├── schema.sql
 │   └── analysis_queries.sql
@@ -119,7 +124,9 @@ nfl-prematch-projection-engine/
 │   ├── model_metrics.csv
 │   ├── weekly_metrics.csv
 │   ├── model_coefficients.csv
-│   └── week18_projection_board.csv
+│   ├── week18_projection_board.csv
+│   ├── 2025_validation_metrics.csv
+│   └── 2026_week1_featured_board.csv
 ├── dashboard/
 │   ├── index.html
 │   └── tableau_build_guide.md
@@ -133,7 +140,24 @@ nfl-prematch-projection-engine/
     └── weekly_mae_receiving_yards.png
 ```
 
-The files in `outputs/` and `assets/` preserve the original historical backtest artifacts. The GitHub Pages site in `docs/index.html` is the forward-looking 2026 Week 1 portfolio dashboard.
+The files in `outputs/` and `assets/` preserve the original historical backtest artifacts as well as fixed snapshots of the published 2025 validation and 2026 featured board. The GitHub Pages site in `docs/index.html` is the forward-looking 2026 Week 1 portfolio dashboard.
+
+## Reproduce the 2026 board
+
+The repository now includes a reproducible forward-looking pipeline rather than only the published HTML dashboard.
+
+```bash
+python -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python src/build_live_2026.py
+```
+
+The live script rebuilds the 2025 validation, refits the model on 2023-2025 history, downloads the 2026 nflverse roster and schedule, generates the Week 1 board, writes review/omission outputs, and rebuilds both the local and GitHub Pages dashboards.
+
+The exact values currently published on the portfolio dashboard are also preserved as fixed CSV snapshots in `outputs/2025_validation_metrics.csv` and `outputs/2026_week1_featured_board.csv`. Because the 2026 roster is a live upstream source, a later rerun can change as roster information changes.
+
+See [`REPRODUCIBILITY.md`](REPRODUCIBILITY.md) for the full rebuild notes.
 
 ## Run the historical pipeline
 
