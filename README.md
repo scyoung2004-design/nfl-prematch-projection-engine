@@ -65,8 +65,10 @@ This is intentionally a **review flag**, not a betting signal. A production syst
 ## Project structure
 
 ```text
-nfl_projection_project/
+nfl-prematch-projection-engine/
 ├── README.md
+├── ATTRIBUTION.md
+├── PROJECT_NOTES.md
 ├── requirements.txt
 ├── src/
 │   └── build_project.py
@@ -77,19 +79,15 @@ nfl_projection_project/
 │   ├── model_metrics.csv
 │   ├── weekly_metrics.csv
 │   ├── model_coefficients.csv
-│   ├── week18_projection_board.csv
-│   └── portfolio_demo.db
+│   └── week18_projection_board.csv
 ├── dashboard/
 │   ├── index.html
 │   └── tableau_build_guide.md
-├── assets/
-│   ├── holdout_mae_comparison.png
-│   ├── weekly_mae_passing_yards.png
-│   ├── weekly_mae_rushing_yards.png
-│   └── weekly_mae_receiving_yards.png
-├── INTERVIEW_GUIDE.md
-├── PORTFOLIO_MATERIALS.md
-└── PROJECT_NOTES.md
+└── assets/
+    ├── holdout_mae_comparison.png
+    ├── weekly_mae_passing_yards.png
+    ├── weekly_mae_rushing_yards.png
+    └── weekly_mae_receiving_yards.png
 ```
 
 ## Run the full pipeline
