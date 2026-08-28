@@ -1,0 +1,31 @@
+market,week,player_name,position,team,opponent,projection,baseline,actual,abs_error,confidence,risk
+passing_yards,18,Joe Burrow,QB,CIN,PIT,289.0,311.7,277,12.0,High,LOW
+passing_yards,18,Jared Goff,QB,DET,MIN,280.3,377.7,231,49.3,Low,HIGH
+passing_yards,18,Sam Darnold,QB,MIN,DET,272.5,284.7,166,106.5,High,LOW
+passing_yards,18,Baker Mayfield,QB,TB,NO,239.5,316.7,221,18.5,Medium,MEDIUM
+passing_yards,18,Joe Flacco,QB,IND,JAX,228.4,260.3,264,35.6,Medium,MEDIUM
+passing_yards,18,Geno Smith,QB,SEA,LA,223.1,207.7,223,0.1,High,LOW
+passing_yards,18,Lamar Jackson,QB,BAL,CLE,220.0,221.7,217,3.0,High,LOW
+passing_yards,18,Justin Herbert,QB,LAC,LV,219.7,253.3,346,126.3,Medium,MEDIUM
+passing_yards,18,Jordan Love,QB,GB,CHI,216.1,198.7,69,147.1,High,LOW
+passing_yards,18,Jayden Daniels,QB,WAS,DAL,214.0,237.0,38,176.0,High,LOW
+rushing_yards,18,Bijan Robinson,RB,ATL,CAR,105.5,103.0,170,64.5,High,LOW
+rushing_yards,18,Jonathan Taylor,RB,IND,JAX,96.0,150.0,177,81.0,Low,HIGH
+rushing_yards,18,Derrick Henry,RB,BAL,CLE,91.8,125.3,138,46.2,Low,HIGH
+rushing_yards,18,Josh Jacobs,RB,GB,CHI,83.3,77.3,44,39.3,High,LOW
+rushing_yards,18,Bucky Irving,RB,TB,NO,80.7,99.3,89,8.3,Low,HIGH
+rushing_yards,18,Rico Dowdle,RB,DAL,WAS,76.6,92.0,72,4.6,Low,HIGH
+rushing_yards,18,Jahmyr Gibbs,RB,DET,MIN,74.2,85.7,139,64.8,Medium,MEDIUM
+rushing_yards,18,Joe Mixon,RB,HOU,TEN,69.6,35.3,23,46.6,Low,HIGH
+rushing_yards,18,James Cook,RB,BUF,NE,62.7,86.0,28,34.7,Low,HIGH
+rushing_yards,18,J.K. Dobbins,RB,LAC,LV,61.8,57.3,63,1.2,High,LOW
+receiving_yards,18,Ja'Marr Chase,WR,CIN,PIT,97.8,97.7,96,1.8,High,LOW
+receiving_yards,18,Tee Higgins,WR,CIN,PIT,84.9,92.3,53,31.9,Medium,MEDIUM
+receiving_yards,18,Amon-Ra St. Brown,WR,DET,MIN,81.2,107.7,77,4.2,Low,HIGH
+receiving_yards,18,Jerry Jeudy,WR,CLE,BAL,78.6,74.0,63,15.6,Low,HIGH
+receiving_yards,18,Jaxon Smith-Njigba,WR,SEA,LA,78.2,70.0,9,69.2,High,LOW
+receiving_yards,18,Malik Nabers,WR,NYG,PHI,77.3,107.0,64,13.3,Low,HIGH
+receiving_yards,18,Trey McBride,TE,ARI,SF,75.9,76.7,65,10.9,High,LOW
+receiving_yards,18,Davante Adams,WR,NYJ,MIA,72.5,104.3,88,15.5,Low,HIGH
+receiving_yards,18,Justin Jefferson,WR,MIN,DET,72.2,103.0,54,18.2,Low,HIGH
+receiving_yards,18,Jordan Addison,WR,MIN,DET,71.0,55.7,0,71.0,Medium,MEDIUM
